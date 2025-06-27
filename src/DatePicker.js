@@ -10,7 +10,7 @@ export default function DatePicker({
   children,
   locale,
   date,
-  onDateChange,
+  onDateChange = () => {},
   format,
   minimumDate,
   maximumDate,
@@ -96,8 +96,4 @@ DatePicker.propTypes = {
   modifiersClassNames: objectOf(string),
   weekdayFormat: string,
   touchDragEnabled: bool
-}
-
-DatePicker.defaultProps = {
-  onDateChange: () => {}
 }

@@ -13,13 +13,13 @@ export default function DateRangePicker({
   locale,
   startDate,
   endDate,
-  onStartDateChange,
-  onEndDateChange,
+  onStartDateChange = () => {},
+  onEndDateChange = () => {},
   format,
   minimumDate,
   maximumDate,
-  minimumLength,
-  maximumLength,
+  minimumLength = 0,
+  maximumLength = null,
   modifiers,
   modifiersClassNames,
   weekdayFormat,
@@ -132,11 +132,4 @@ DateRangePicker.propTypes = {
   modifiersClassNames: objectOf(string),
   weekdayFormat: string,
   touchDragEnabled: bool
-}
-
-DateRangePicker.defaultProps = {
-  onStartDateChange: () => {},
-  onEndDateChange: () => {},
-  minimumLength: 0,
-  maximumLength: null
 }
