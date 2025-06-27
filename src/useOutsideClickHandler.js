@@ -16,10 +16,10 @@ export default function useOutsideClickHandler(callback) {
       }
     }
 
-    document.addEventListener('click', handleOutsideClick)
+    document.addEventListener('click', handleOutsideClick, { passive: true })
 
     return () => {
-      document.removeEventListener('click', handleOutsideClick)
+      document.removeEventListener('click', handleOutsideClick, { passive: true })
     }
   }, [callback])
 

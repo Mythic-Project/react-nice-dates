@@ -5,7 +5,7 @@ declare module "react-nice-dates" {
   type DateChangeCallBack = (date: Date | null) => void;
 
   interface InputProps {
-    ref: React.MutableRefObject<any>;
+    ref: React.RefObject<any>;
     placeholder: string;
     type: string;
     value: string;
@@ -114,4 +114,7 @@ declare module "react-nice-dates" {
     onDateChange: (date: Date) => void,
     validate?: (date: Date) => boolean,
   }): any
+
+  export const START_DATE: string;
+  export const END_DATE: string;
 }
