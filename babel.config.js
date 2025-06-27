@@ -1,3 +1,3 @@
 module.exports = {
-  presets: [['@babel/preset-env', { targets: { ie: '11' } }], ['@babel/preset-react']]
+  presets: [['@babel/preset-env'], ['@babel/preset-react']]
 }
