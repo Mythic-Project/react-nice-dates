@@ -1,5 +1,4 @@
-import React from 'react'
-import { bool, instanceOf, func, number, object, objectOf, string } from 'prop-types'
+import React, { MouseEvent, TouchEvent } from 'react'
 import { getDate, format, isToday } from 'date-fns'
 import classNames from 'classnames'
 
@@ -14,25 +13,44 @@ const defaultModifiersClassNames = {
   selectedEnd: '-selected-end'
 }
 
-export default function CalendarDay({
+export interface CalendarDayProps {
+  date: Date
+  height: number
+  locale: object
+  modifiers?: Record<string, boolean>
+  modifiersClassNames?: Record<string, string>
+  onClick?: (date: Date) => void
+  onHover?: (date: Date | null) => void
+}
+
+const defaultModifiers: Record<string, boolean> = {}
+const defaultEventHandler = () => {}
+
+export function CalendarDay({
   date,
   height,
   locale,
-  modifiers: receivedModifiers = {},
+  modifiers: receivedModifiers = defaultModifiers,
   modifiersClassNames: receivedModifiersClassNames,
-  onClick = () => {},
-  onHover = () => {}
-}) {
+  onClick = defaultEventHandler,
+  onHover = defaultEventHandler
+}: CalendarDayProps): React.JSX.Element {
   const dayOfMonth = getDate(date)
-  const dayClassNames = {}
-  const modifiers = { today: isToday(date), ...receivedModifiers }
-  const modifiersClassNames = { ...defaultModifiersClassNames, ...receivedModifiersClassNames }
+  const dayClassNames: Record<string, boolean> = {}
+  const modifiers: Record<string, boolean> = {
+    today: isToday(date),
+    ...receivedModifiers
+  }
+  const modifiersClassNames: Record<string, string> = {
+    ...defaultModifiersClassNames,
+    ...receivedModifiersClassNames
+  }
 
   Object.keys(modifiers).forEach(name => {
     dayClassNames[modifiersClassNames[name]] = modifiers[name]
   })
 
-  const handleClick = event => {
+  const handleClick = (event: MouseEvent | TouchEvent) => {
     onClick(date)
     event.preventDefault()
   }
@@ -60,14 +78,4 @@ export default function CalendarDay({
       <span className='nice-dates-day_date'>{dayOfMonth}</span>
     </span>
   )
-}
-
-CalendarDay.propTypes = {
-  date: instanceOf(Date).isRequired,
-  height: number.isRequired,
-  locale: object.isRequired,
-  modifiers: objectOf(bool),
-  modifiersClassNames: objectOf(string),
-  onHover: func,
-  onClick: func
 }

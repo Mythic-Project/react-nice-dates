@@ -1,13 +1,21 @@
 import React from 'react'
-import { bool, func, instanceOf, object, objectOf, string } from 'prop-types'
 import { startOfMonth } from 'date-fns'
 import { isSelectable, mergeModifiers } from './utils'
-import useControllableState from './useControllableState'
-import CalendarNavigation from './CalendarNavigation'
-import CalendarWeekHeader from './CalendarWeekHeader'
-import CalendarGrid from './CalendarGrid'
+import { useControllableState } from './useControllableState'
+import { CalendarNavigation } from './CalendarNavigation'
+import { CalendarWeekHeader } from './CalendarWeekHeader'
+import { CalendarGrid } from './CalendarGrid'
+import { CommonProps, DateChangeCallBack } from './types'
 
-export default function Calendar({
+export interface CalendarProps extends CommonProps {
+  month?: Date
+  onMonthChange?: DateChangeCallBack<Date>
+  onDayHover?: DateChangeCallBack
+  onDayClick?: DateChangeCallBack<Date>
+  touchDragEnabled?: boolean
+}
+
+export function Calendar({
   locale,
   month: receivedMonth,
   modifiers: receivedModifiers,
@@ -19,8 +27,12 @@ export default function Calendar({
   onDayClick,
   weekdayFormat,
   touchDragEnabled
-}) {
-  const [month, setMonth] = useControllableState(receivedMonth, onMonthChange, startOfMonth(new Date()))
+}: CalendarProps): React.JSX.Element {
+  const [month, setMonth] = useControllableState(
+    receivedMonth,
+    onMonthChange as (month: Date) => void,
+    startOfMonth(new Date())
+  )
 
   const modifiers = mergeModifiers(
     { disabled: date => !isSelectable(date, { minimumDate, maximumDate }) },
@@ -37,7 +49,7 @@ export default function Calendar({
         onMonthChange={setMonth}
       />
 
-      <CalendarWeekHeader locale={locale} weekdayFormat={weekdayFormat}/>
+      <CalendarWeekHeader locale={locale} weekdayFormat={weekdayFormat} />
 
       <CalendarGrid
         locale={locale}
@@ -51,18 +63,4 @@ export default function Calendar({
       />
     </div>
   )
-}
-
-Calendar.propTypes = {
-  locale: object.isRequired,
-  minimumDate: instanceOf(Date),
-  maximumDate: instanceOf(Date),
-  modifiers: objectOf(func),
-  modifiersClassNames: objectOf(string),
-  month: instanceOf(Date),
-  onMonthChange: func,
-  onDayHover: func,
-  onDayClick: func,
-  weekdayFormat: string,
-  touchDragEnabled: bool
 }

@@ -1,37 +1,59 @@
 import React, { useState } from 'react'
-import { bool, func, instanceOf, number, object, objectOf, string } from 'prop-types'
 import { isRangeLengthValid } from './utils'
 import { START_DATE, END_DATE } from './constants'
-import useDateInput from './useDateInput'
-import useOutsideClickHandler from './useOutsideClickHandler'
-import useDetectTouch from './useDetectTouch'
-import DateRangePickerCalendar from './DateRangePickerCalendar'
-import Popover from './Popover'
+import { useDateInput } from './useDateInput'
+import { useOutsideClickHandler } from './useOutsideClickHandler'
+import { useDetectTouch } from './useDetectTouch'
+import { DateRangePickerCalendar } from './DateRangePickerCalendar'
+import { Popover } from './Popover'
+import { CommonProps, DateChangeCallBack, DateRangeFocus, InputProps } from './types'
 
-export default function DateRangePicker({
+export interface DateRangePickerChildrenProps {
+  startDateInputProps: InputProps
+  endDateInputProps: InputProps
+  focus?: DateRangeFocus
+}
+
+export interface DateRangePickerProps extends CommonProps {
+  children: (props: DateRangePickerChildrenProps) => React.ReactNode
+  startDate?: Date
+  endDate?: Date
+  minimumLength?: number
+  maximumLength?: number
+  onStartDateChange?: DateChangeCallBack
+  onEndDateChange?: DateChangeCallBack
+  format?: string
+  touchDragEnabled?: boolean
+}
+
+const defaultListener = () => {}
+
+export function DateRangePicker({
   children,
   locale,
   startDate,
   endDate,
-  onStartDateChange = () => {},
-  onEndDateChange = () => {},
+  onStartDateChange = defaultListener,
+  onEndDateChange = defaultListener,
   format,
   minimumDate,
   maximumDate,
   minimumLength = 0,
-  maximumLength = null,
+  maximumLength,
   modifiers,
   modifiersClassNames,
   weekdayFormat,
   touchDragEnabled
-}) {
-  const [focus, setFocus] = useState()
-  const [month, setMonth] = useState(startDate || endDate || new Date())
+}: DateRangePickerProps): React.JSX.Element {
+  const [focus, setFocus] = useState<DateRangeFocus | undefined>()
+  const [month, setMonth] = useState<Date | undefined>(() => startDate || endDate || new Date())
   const isTouch = useDetectTouch()
 
-  const [startDateInputRef, endDateInputRef, popoverRef] = useOutsideClickHandler(() => {
-    setFocus(null)
-  })
+  const [startDateInputRef, endDateInputRef, popoverRef] = useOutsideClickHandler<
+    HTMLInputElement,
+    HTMLInputElement,
+    HTMLDivElement
+  >(() => setFocus(undefined))
 
   const startDateInputProps = useDateInput({
     date: startDate,
@@ -41,9 +63,12 @@ export default function DateRangePicker({
     minimumDate,
     onDateChange: date => {
       onStartDateChange(date)
-      date && setMonth(date)
+      if (date) {
+        setMonth(date)
+      }
     },
-    validate: date => !endDate || isRangeLengthValid({ startDate: date, endDate }, { minimumLength, maximumLength })
+    validate: date =>
+      !endDate || isRangeLengthValid({ startDate: date, endDate }, { minimumLength, maximumLength })
   })
 
   const endDateInputProps = useDateInput({
@@ -54,9 +79,13 @@ export default function DateRangePicker({
     minimumDate,
     onDateChange: date => {
       onEndDateChange(date)
-      date && setMonth(date)
+      if (date) {
+        setMonth(date)
+      }
     },
-    validate: date => !startDate || isRangeLengthValid({ startDate, endDate: date }, { minimumLength, maximumLength })
+    validate: date =>
+      !startDate ||
+      isRangeLengthValid({ startDate, endDate: date }, { minimumLength, maximumLength })
   })
 
   return (
@@ -68,7 +97,7 @@ export default function DateRangePicker({
             startDateInputProps.onFocus()
             setFocus(START_DATE)
 
-            if (isTouch) {
+            if (isTouch && startDateInputRef.current) {
               startDateInputRef.current.blur()
             }
           },
@@ -81,7 +110,7 @@ export default function DateRangePicker({
             endDateInputProps.onFocus()
             setFocus(END_DATE)
 
-            if (isTouch) {
+            if (isTouch && endDateInputRef.current) {
               endDateInputRef.current.blur()
             }
           },
@@ -101,7 +130,7 @@ export default function DateRangePicker({
           onStartDateChange={onStartDateChange}
           onEndDateChange={onEndDateChange}
           onFocusChange={setFocus}
-          onMonthChange={setMonth}
+          onMonthChange={setMonth as (date: Date | null) => void}
           minimumDate={minimumDate}
           maximumDate={maximumDate}
           minimumLength={minimumLength}
@@ -114,22 +143,4 @@ export default function DateRangePicker({
       </Popover>
     </div>
   )
-}
-
-DateRangePicker.propTypes = {
-  children: func.isRequired,
-  locale: object.isRequired,
-  startDate: instanceOf(Date),
-  endDate: instanceOf(Date),
-  onStartDateChange: func,
-  onEndDateChange: func,
-  format: string,
-  minimumDate: instanceOf(Date),
-  maximumDate: instanceOf(Date),
-  minimumLength: number,
-  maximumLength: number,
-  modifiers: objectOf(func),
-  modifiersClassNames: objectOf(string),
-  weekdayFormat: string,
-  touchDragEnabled: bool
 }

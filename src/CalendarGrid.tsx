@@ -1,34 +1,64 @@
 import React from 'react'
-import { bool, instanceOf, func, number, object, objectOf, string } from 'prop-types'
 import { eachDayOfInterval, isSameMonth, lightFormat, startOfMonth } from 'date-fns'
 import classNames from 'classnames'
-import useGrid from './useGrid'
+import { useGrid } from './useGrid'
 import { ORIGIN_BOTTOM, ORIGIN_TOP } from './constants'
-import CalendarDay from './CalendarDay'
+import { CalendarDay } from './CalendarDay'
+import { ModifierMatcher, Modifiers, ModifiersClassNames } from './types'
 
-const computeModifiers = (modifiers, date) => {
-  const computedModifiers = {}
-
-  Object.keys(modifiers).map(key => {
-    computedModifiers[key] = modifiers[key](date)
-  })
-
-  return computedModifiers
+function computeModifiers<TKey extends string>(
+  modifiers: Record<TKey, ModifierMatcher>,
+  date: Date
+): Record<TKey, boolean> {
+  return Object.fromEntries(
+    Object.entries(modifiers as Record<string, ModifierMatcher>).map(([key, modifierMatcher]) => [
+      key,
+      modifierMatcher(date)
+    ])
+  ) as Record<TKey, boolean>
 }
 
-export default function CalendarGrid({
+export interface CalendarGridProps {
+  locale: Locale
+  month: Date
+  modifiers?: Modifiers
+  modifiersClassNames?: ModifiersClassNames
+  onMonthChange: (month: Date) => void
+  onDayHover?: (date: Date | null) => void
+  onDayClick?: (date: Date) => void
+  transitionDuration?: number
+  touchDragEnabled?: boolean
+}
+
+const defaultModifiers: Modifiers = {}
+
+export function CalendarGrid({
   locale,
   month,
-  modifiers = {},
+  modifiers = defaultModifiers,
   modifiersClassNames,
   onMonthChange,
   onDayHover,
   onDayClick,
   transitionDuration = 500,
   touchDragEnabled = true
-}) {
-  const grid = useGrid({ locale, month: startOfMonth(month), onMonthChange, transitionDuration, touchDragEnabled })
-  const { startDate, endDate, cellHeight, containerElementRef, isWide, offset, origin, transition } = grid
+}: CalendarGridProps): React.JSX.Element {
+  const {
+    startDate,
+    endDate,
+    cellHeight,
+    containerElementRef,
+    isWide,
+    offset,
+    origin,
+    transition
+  } = useGrid<HTMLDivElement>({
+    locale,
+    month: startOfMonth(month),
+    onMonthChange,
+    transitionDuration,
+    touchDragEnabled
+  })
 
   const days = eachDayOfInterval({
     start: startDate,
@@ -71,16 +101,4 @@ export default function CalendarGrid({
       </div>
     </div>
   )
-}
-
-CalendarGrid.propTypes = {
-  locale: object.isRequired,
-  month: instanceOf(Date).isRequired,
-  modifiers: objectOf(func),
-  modifiersClassNames: objectOf(string),
-  onMonthChange: func.isRequired,
-  onDayHover: func,
-  onDayClick: func,
-  transitionDuration: number,
-  touchDragEnabled: bool
 }
