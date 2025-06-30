@@ -13,7 +13,7 @@ export interface DatePickerChildrenProps {
 
 export interface DatePickerProps extends CommonProps {
   children: (props: DatePickerChildrenProps) => React.ReactNode
-  date?: Date
+  date?: Date | null
   onDateChange?: DateChangeCallBack
   format?: string
   touchDragEnabled?: boolean
@@ -24,7 +24,7 @@ const defaultOnDateChange = () => {}
 export function DatePicker({
   children,
   locale,
-  date,
+  date = null,
   onDateChange = defaultOnDateChange,
   format,
   minimumDate,

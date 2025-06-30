@@ -7,13 +7,13 @@ import { Calendar } from './Calendar'
 import { CommonProps, DateChangeCallBack, DateRangeFocus } from './types'
 
 export interface DateRangePickerCalendarProps extends CommonProps {
-  startDate?: Date
-  endDate?: Date
-  focus?: DateRangeFocus
-  month?: Date
+  startDate?: Date | null
+  endDate?: Date | null
+  focus?: DateRangeFocus | null
+  month?: Date | null
   minimumLength?: number
   maximumLength?: number
-  onFocusChange?: (focus: DateRangeFocus | undefined) => void
+  onFocusChange?: (focus: DateRangeFocus | null) => void
   onStartDateChange?: DateChangeCallBack
   onEndDateChange?: DateChangeCallBack
   onMonthChange?: DateChangeCallBack
@@ -24,10 +24,10 @@ const defaultListener = () => {}
 
 export function DateRangePickerCalendar({
   locale,
-  startDate,
-  endDate,
-  focus,
-  month: receivedMonth,
+  startDate = null,
+  endDate = null,
+  focus = null,
+  month: receivedMonth = null,
   onStartDateChange = defaultListener,
   onEndDateChange = defaultListener,
   onFocusChange = defaultListener,
@@ -141,7 +141,7 @@ export function DateRangePickerCalendar({
       }
 
       onEndDateChange(endDate ? setTime(date, endDate) : date)
-      onFocusChange(invalidStartDate || !startDate ? START_DATE : undefined)
+      onFocusChange(invalidStartDate || !startDate ? START_DATE : null)
     }
   }
 

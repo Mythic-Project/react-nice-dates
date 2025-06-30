@@ -5,7 +5,7 @@ export function useControllableState<T>(
   onChange: ((value: T) => void) | null | undefined
 ): [T, (value: T) => void]
 export function useControllableState<T>(
-  value: T | undefined,
+  value: T | null,
   onChange: ((value: T) => void) | null | undefined,
   initialValue: T
 ): [T, (value: T) => void]

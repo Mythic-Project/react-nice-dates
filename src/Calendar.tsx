@@ -8,7 +8,7 @@ import { CalendarGrid } from './CalendarGrid'
 import { CommonProps, DateChangeCallBack } from './types'
 
 export interface CalendarProps extends CommonProps {
-  month?: Date
+  month?: Date | null
   onMonthChange?: DateChangeCallBack<Date>
   onDayHover?: DateChangeCallBack
   onDayClick?: DateChangeCallBack<Date>
@@ -17,11 +17,11 @@ export interface CalendarProps extends CommonProps {
 
 export function Calendar({
   locale,
-  month: receivedMonth,
+  month: receivedMonth = null,
   modifiers: receivedModifiers,
   modifiersClassNames,
-  minimumDate,
-  maximumDate,
+  minimumDate = null,
+  maximumDate = null,
   onMonthChange,
   onDayHover,
   onDayClick,
@@ -30,7 +30,7 @@ export function Calendar({
 }: CalendarProps): React.JSX.Element {
   const [month, setMonth] = useControllableState(
     receivedMonth,
-    onMonthChange as (month: Date) => void,
+    onMonthChange,
     startOfMonth(new Date())
   )
 

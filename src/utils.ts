@@ -7,8 +7,8 @@ export const isSelectable = (
     minimumDate,
     maximumDate
   }: {
-    minimumDate?: Date
-    maximumDate?: Date
+    minimumDate?: Date | null
+    maximumDate?: Date | null
   }
 ): boolean =>
   Boolean(

@@ -5,16 +5,16 @@ import { addMonths, getYear, startOfMonth, subMonths, format, isSameMonth, Local
 export interface CalendarNavigationProps {
   locale: Locale
   month: Date
-  minimumDate?: Date
-  maximumDate?: Date
+  minimumDate?: Date | null
+  maximumDate?: Date | null
   onMonthChange: (month: Date) => void
 }
 
 export function CalendarNavigation({
   locale,
   month,
-  minimumDate,
-  maximumDate,
+  minimumDate = null,
+  maximumDate = null,
   onMonthChange
 }: CalendarNavigationProps): React.JSX.Element {
   const handlePrevious = (event: MouseEvent<HTMLAnchorElement> | TouchEvent<HTMLAnchorElement>) => {

@@ -11,13 +11,13 @@ import { CommonProps, DateChangeCallBack, DateRangeFocus, InputProps } from './t
 export interface DateRangePickerChildrenProps {
   startDateInputProps: InputProps
   endDateInputProps: InputProps
-  focus?: DateRangeFocus
+  focus?: DateRangeFocus | null
 }
 
 export interface DateRangePickerProps extends CommonProps {
   children: (props: DateRangePickerChildrenProps) => React.ReactNode
-  startDate?: Date
-  endDate?: Date
+  startDate?: Date | null
+  endDate?: Date | null
   minimumLength?: number
   maximumLength?: number
   onStartDateChange?: DateChangeCallBack
@@ -31,8 +31,8 @@ const defaultListener = () => {}
 export function DateRangePicker({
   children,
   locale,
-  startDate,
-  endDate,
+  startDate = null,
+  endDate = null,
   onStartDateChange = defaultListener,
   onEndDateChange = defaultListener,
   format,
@@ -45,15 +45,15 @@ export function DateRangePicker({
   weekdayFormat,
   touchDragEnabled
 }: DateRangePickerProps): React.JSX.Element {
-  const [focus, setFocus] = useState<DateRangeFocus | undefined>()
-  const [month, setMonth] = useState<Date | undefined>(() => startDate || endDate || new Date())
+  const [focus, setFocus] = useState<DateRangeFocus | null>(null)
+  const [month, setMonth] = useState<Date | null>(() => startDate || endDate || new Date())
   const isTouch = useDetectTouch()
 
   const [startDateInputRef, endDateInputRef, popoverRef] = useOutsideClickHandler<
     HTMLInputElement,
     HTMLInputElement,
     HTMLDivElement
-  >(() => setFocus(undefined))
+  >(() => setFocus(null))
 
   const startDateInputProps = useDateInput({
     date: startDate,
@@ -130,7 +130,7 @@ export function DateRangePicker({
           onStartDateChange={onStartDateChange}
           onEndDateChange={onEndDateChange}
           onFocusChange={setFocus}
-          onMonthChange={setMonth as (date: Date | null) => void}
+          onMonthChange={setMonth}
           minimumDate={minimumDate}
           maximumDate={maximumDate}
           minimumLength={minimumLength}

@@ -52,7 +52,7 @@ const createInitialState = (currentMonth: Date, locale: Locale): GridState => {
   }
 }
 
-export type GridAction =
+type GridAction =
   | { type: 'setStartDate'; value: Date }
   | { type: 'setEndDate'; value: Date }
   | { type: 'setRange'; startDate: Date; endDate: Date }

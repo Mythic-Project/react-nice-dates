@@ -22,8 +22,8 @@ export type ModifiersClassNames = { [key in DefaultModifiers | string]: string }
 
 export interface CommonProps {
   locale: Locale
-  minimumDate?: Date
-  maximumDate?: Date
+  minimumDate?: Date | null
+  maximumDate?: Date | null
   modifiers?: Modifiers
   modifiersClassNames?: ModifiersClassNames
   weekdayFormat?: string

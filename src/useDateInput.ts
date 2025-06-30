@@ -6,8 +6,8 @@ export interface UseDateInputProps {
   date?: Date | null
   format?: string
   locale: Locale
-  minimumDate?: Date
-  maximumDate?: Date
+  minimumDate?: Date | null
+  maximumDate?: Date | null
   onDateChange: (date: Date | null) => void
   validate?: (date: Date) => boolean
 }
@@ -22,11 +22,11 @@ export interface UseDateInputReturn {
 }
 
 export function useDateInput({
-  date: selectedDate,
+  date: selectedDate = null,
   format: receivedFormatString,
   locale,
-  minimumDate,
-  maximumDate,
+  minimumDate = null,
+  maximumDate = null,
   onDateChange,
   validate
 }: UseDateInputProps): UseDateInputReturn {
@@ -36,7 +36,7 @@ export function useDateInput({
   const formatDate = (date: Date) => format(date, formatString, { locale })
   const parseDate = (dateString: string) =>
     parse(dateString, formatString, selectedDate || new Date())
-  const isValidAndSelectable = (date: Date | null | undefined): date is Date =>
+  const isValidAndSelectable = (date: Date | null): date is Date =>
     (isValid as (date: unknown) => date is Date)(date) &&
     isSelectable(date, { minimumDate, maximumDate }) &&
     (!validate || validate(date))

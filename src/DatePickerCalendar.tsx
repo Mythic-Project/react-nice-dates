@@ -6,8 +6,8 @@ import { Calendar } from './Calendar'
 import { CommonProps, DateChangeCallBack } from './types'
 
 export interface DatePickerCalendarProps extends CommonProps {
-  date?: Date
-  month?: Date
+  date?: Date | null
+  month?: Date | null
   onDateChange?: DateChangeCallBack<Date>
   onMonthChange?: DateChangeCallBack<Date>
   touchDragEnabled?: boolean
@@ -15,8 +15,8 @@ export interface DatePickerCalendarProps extends CommonProps {
 
 export function DatePickerCalendar({
   locale,
-  date: selectedDate,
-  month: receivedMonth,
+  date: selectedDate = null,
+  month: receivedMonth = null,
   onDateChange,
   onMonthChange,
   minimumDate,

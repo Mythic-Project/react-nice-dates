@@ -55,7 +55,7 @@ describe('DateRangePickerCalendar', () => {
 
     expect(handleStartDateChange).toHaveBeenCalledTimes(1)
     expect(handleEndDateChange).toHaveBeenCalledTimes(1)
-    expect(handleFocusChange).toHaveBeenCalledWith(undefined)
+    expect(handleFocusChange).toHaveBeenCalledWith(null)
   })
 
   it('should display selected date range', () => {
