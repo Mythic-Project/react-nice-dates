@@ -15,7 +15,9 @@ export interface InputProps {
 export type DefaultModifiers = 'disabled' | 'selected' | 'today'
 export type ModifierMatcher = (date: Date) => boolean
 
+// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 export type Modifiers = { [key in DefaultModifiers | string]: ModifierMatcher }
+// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 export type ModifiersClassNames = { [key in DefaultModifiers | string]: string }
 
 export interface CommonProps {

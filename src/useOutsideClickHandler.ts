@@ -11,12 +11,16 @@ export function useOutsideClickHandler<
   const callbackRef = useRef(callback)
 
   useEffect(() => {
+    callbackRef.current = callback
+  }, [callback])
+
+  useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       const target = event.target as Node | null
       if (
-        (!refA.current || (refA.current.contains && !refA.current.contains(target))) &&
-        (!refB.current || (refB.current.contains && !refB.current.contains(target))) &&
-        (!refC.current || (refC.current.contains && !refC.current.contains(target)))
+        (!refA.current || ('contains' in refA.current && !refA.current.contains(target))) &&
+        (!refB.current || ('contains' in refB.current && !refB.current.contains(target))) &&
+        (!refC.current || ('contains' in refC.current && !refC.current.contains(target)))
       ) {
         callbackRef.current()
       }

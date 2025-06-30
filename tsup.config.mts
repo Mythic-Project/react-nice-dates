@@ -1,7 +1,7 @@
 import { type Options, defineConfig } from 'tsup'
 
 const commons: Options = {
-  minify: false,
+  minify: 'terser',
   sourcemap: true,
   dts: true,
   clean: true,
@@ -14,5 +14,6 @@ export default defineConfig([
     ...commons,
     entryPoints: ['src/index.ts'],
     outDir: 'build',
+    tsconfig: 'tsconfig.build.json',
   },
 ])

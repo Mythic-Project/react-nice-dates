@@ -11,21 +11,22 @@ export default tseslint.config({
 
   extends: [
     eslintJs.configs.recommended,
-    tseslint.configs.recommended,
-    eslintReact.configs['recommended-typescript'],
+    tseslint.configs.strictTypeChecked,
+    eslintReact.configs['recommended-type-checked'],
     eslintPluginPrettierRecommended
   ],
 
   languageOptions: {
     parser: tseslint.parser,
     parserOptions: {
-      projectService: true,
-      tsconfigRootDir: import.meta.dirname
+      tsconfigRootDir: import.meta.dirname,
+      project: 'tsconfig.eslint.json'
     }
   },
 
   rules: {
-    '@eslint-react/no-missing-key': 'warn',
+    '@typescript-eslint/no-confusing-void-expression': 'off',
+    "@typescript-eslint/no-unnecessary-condition": 'off',
     'prettier/prettier': ['error', prettierrc]
   }
 })

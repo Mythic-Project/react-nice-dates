@@ -12,10 +12,8 @@ export const isSelectable = (
   }
 ): boolean =>
   Boolean(
-    minimumDate &&
-      maximumDate &&
-      !isBefore(date, startOfDay(minimumDate)) &&
-      !isAfter(date, maximumDate)
+    !(minimumDate && isBefore(date, startOfDay(minimumDate))) &&
+      !(maximumDate && isAfter(date, maximumDate))
   )
 
 export const mergeModifiers = (
@@ -27,10 +25,10 @@ export const mergeModifiers = (
   }
 
   return Object.fromEntries(
-    Object.entries(newModifiers).map(([name, newModifier]) => [
-      name,
-      baseModifiers[name] ? date => baseModifiers[name](date) || newModifier(date) : newModifier
-    ])
+    Object.entries(newModifiers).map(([name, newModifier]) => {
+      const baseModifier = baseModifiers[name]
+      return [name, baseModifier ? date => baseModifier(date) || newModifier(date) : newModifier]
+    })
   )
 }
 

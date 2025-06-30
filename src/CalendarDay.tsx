@@ -1,5 +1,5 @@
 import React, { MouseEvent, TouchEvent } from 'react'
-import { getDate, format, isToday } from 'date-fns'
+import { getDate, format, isToday, Locale } from 'date-fns'
 import classNames from 'classnames'
 
 const defaultModifiersClassNames = {
@@ -16,7 +16,7 @@ const defaultModifiersClassNames = {
 export interface CalendarDayProps {
   date: Date
   height: number
-  locale: object
+  locale: Locale
   modifiers?: Record<string, boolean>
   modifiersClassNames?: Record<string, string>
   onClick?: (date: Date) => void
@@ -36,7 +36,6 @@ export function CalendarDay({
   onHover = defaultEventHandler
 }: CalendarDayProps): React.JSX.Element {
   const dayOfMonth = getDate(date)
-  const dayClassNames: Record<string, boolean> = {}
   const modifiers: Record<string, boolean> = {
     today: isToday(date),
     ...receivedModifiers
@@ -46,22 +45,20 @@ export function CalendarDay({
     ...receivedModifiersClassNames
   }
 
-  Object.keys(modifiers).forEach(name => {
-    dayClassNames[modifiersClassNames[name]] = modifiers[name]
-  })
+  const dayClassNames = Object.fromEntries(
+    Object.entries(modifiers).map(([name, modifier]) => [
+      modifiersClassNames[name] as string,
+      modifier
+    ])
+  )
 
   const handleClick = (event: MouseEvent | TouchEvent) => {
     onClick(date)
     event.preventDefault()
   }
 
-  const handleMouseEnter = () => {
-    onHover(date)
-  }
-
-  const handleMouseLeave = () => {
-    onHover(null)
-  }
+  const handleMouseEnter = () => onHover(date)
+  const handleMouseLeave = () => onHover(null)
 
   return (
     <span

@@ -201,9 +201,12 @@ export function useGrid<TRef extends HTMLElement = HTMLElement>({
           })
         }
 
-        containerElement.style.transform = `translate3d(0, ${
+        if (!event.touches[0]) {
+          return
+        }
+        containerElement.style.transform = `translate3d(0, ${String(
           computedOffset || -currentMonthPosition
-        }px, 0)`
+        )}px, 0)`
         containerElement.classList.remove('-transition')
         containerElement.classList.add('-moving')
         initialDragPositionRef.current =
@@ -211,6 +214,9 @@ export function useGrid<TRef extends HTMLElement = HTMLElement>({
       }
 
       const handleDrag = (event: TouchEvent) => {
+        if (!event.touches[0]) {
+          return
+        }
         const initialDragPosition = initialDragPositionRef.current
         const dragOffset = event.touches[0].clientY - initialDragPosition
         const previousMonth = subMonths(currentMonth, 1)
@@ -250,14 +256,14 @@ export function useGrid<TRef extends HTMLElement = HTMLElement>({
           onMonthChange(previousMonth)
         }
 
-        containerElement.style.transform = `translate3d(0, ${dragOffset}px, 0)`
+        containerElement.style.transform = `translate3d(0, ${String(dragOffset)}px, 0)`
         event.preventDefault()
       }
 
       const handleDragEnd = (event: TouchEvent) => {
         const currentMonthPosition =
           (rowsBetweenDates(startDate, currentMonth, locale) - 1) * cellHeight
-        containerElement.style.transform = `translate3d(0, ${-currentMonthPosition}px, 0)`
+        containerElement.style.transform = `translate3d(0, ${String(-currentMonthPosition)}px, 0)`
         containerElement.classList.add('-transition')
         containerElement.classList.remove('-moving')
 
@@ -269,6 +275,7 @@ export function useGrid<TRef extends HTMLElement = HTMLElement>({
         }, transitionDuration)
 
         if (
+          event.changedTouches[0] &&
           Math.abs(
             initialDragPositionRef.current - currentMonthPosition - event.changedTouches[0].clientY
           ) > 10

@@ -1,10 +1,9 @@
-import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import { addDays, format, startOfMonth, set, startOfDay, subMonths } from 'date-fns'
 import { enGB as locale } from 'date-fns/locale'
 import { START_DATE, END_DATE } from '../src/constants'
-import DateRangePickerCalendar from '../src/DateRangePickerCalendar'
+import { DateRangePickerCalendar } from '../src/DateRangePickerCalendar'
 
 describe('DateRangePickerCalendar', () => {
   it('should render', () => {
@@ -35,7 +34,7 @@ describe('DateRangePickerCalendar', () => {
       />
     )
 
-    fireEvent.click(getAllByText('1')[0])
+    fireEvent.click(getAllByText('1')[0] as HTMLElement)
 
     expect(handleStartDateChange).toHaveBeenCalledTimes(1)
     expect(handleEndDateChange).toHaveBeenCalledTimes(0)
@@ -52,11 +51,11 @@ describe('DateRangePickerCalendar', () => {
       />
     )
 
-    fireEvent.click(getAllByText('2')[0])
+    fireEvent.click(getAllByText('2')[0] as HTMLElement)
 
     expect(handleStartDateChange).toHaveBeenCalledTimes(1)
     expect(handleEndDateChange).toHaveBeenCalledTimes(1)
-    expect(handleFocusChange).toHaveBeenCalledWith(null)
+    expect(handleFocusChange).toHaveBeenCalledWith(undefined)
   })
 
   it('should display selected date range', () => {
@@ -67,37 +66,45 @@ describe('DateRangePickerCalendar', () => {
       <DateRangePickerCalendar locale={locale} startDate={startDate} />
     )
 
-    expect(getAllByText('1')[0].parentElement).toHaveClass('-selected')
+    expect(getAllByText('1')[0]?.parentElement).toHaveClass('-selected')
     expect(container.querySelectorAll('.-selected').length).toBe(1)
 
     rerender(<DateRangePickerCalendar locale={locale} startDate={startDate} endDate={endDate} />)
 
-    expect(getAllByText('1')[0].parentElement).toHaveClass('-selected -selected-start')
-    expect(getAllByText('2')[0].parentElement).toHaveClass('-selected -selected-middle')
-    expect(getAllByText('3')[0].parentElement).toHaveClass('-selected -selected-end')
+    expect(getAllByText('1')[0]?.parentElement).toHaveClass('-selected -selected-start')
+    expect(getAllByText('2')[0]?.parentElement).toHaveClass('-selected -selected-middle')
+    expect(getAllByText('3')[0]?.parentElement).toHaveClass('-selected -selected-end')
     expect(container.querySelectorAll('.-selected').length).toBe(3)
   })
 
-  it('should display pre-selected start date’s month on initial render', () => {
+  it("should display pre-selected start date's month on initial render", () => {
     const today = new Date()
     const pastDate = subMonths(today, 1)
     const monthName = format(pastDate, 'LLLL', { locale })
 
-    const { getByText } = render(<DateRangePickerCalendar locale={locale} startDate={pastDate} endDate={today} />)
+    const { getAllByText } = render(
+      <DateRangePickerCalendar locale={locale} startDate={pastDate} endDate={today} />
+    )
 
-    expect(getByText(monthName, { exact: false })).toBeInTheDocument()
+    const results = getAllByText(monthName, { exact: false })
+    expect(results.length).toBe(2)
+    expect(results[0]).toHaveClass('nice-dates-navigation_current')
+    expect(results[1]).toHaveClass('nice-dates-day_month')
   })
 
-  it('should display pre-selected end date’s month on initial render', () => {
+  it("should display pre-selected end date's month on initial render", () => {
     const pastDate = subMonths(new Date(), 1)
     const monthName = format(pastDate, 'LLLL', { locale })
 
-    const { getByText } = render(<DateRangePickerCalendar locale={locale} endDate={pastDate} />)
+    const { getAllByText } = render(<DateRangePickerCalendar locale={locale} endDate={pastDate} />)
 
-    expect(getByText(monthName, { exact: false })).toBeInTheDocument()
+    const results = getAllByText(monthName, { exact: false })
+    expect(results.length).toBe(2)
+    expect(results[0]).toHaveClass('nice-dates-navigation_current')
+    expect(results[1]).toHaveClass('nice-dates-day_month')
   })
 
-  it('should maintain the selected start date’s time when selecting a new date', () => {
+  it("should maintain the selected start date's time when selecting a new date", () => {
     const handleStartDateChange = jest.fn()
 
     const { getByText } = render(
@@ -114,7 +121,7 @@ describe('DateRangePickerCalendar', () => {
     expect(handleStartDateChange).toHaveBeenCalledWith(new Date(2020, 1, 25, 18, 30))
   })
 
-  it('should maintain the selected end date’s time when selecting a new date', () => {
+  it("should maintain the selected end date's time when selecting a new date", () => {
     const handleEndDateChange = jest.fn()
 
     const { getByText } = render(
@@ -134,7 +141,9 @@ describe('DateRangePickerCalendar', () => {
   it('should allow same day selection by default (when minimumLength is 0)', () => {
     const startDate = startOfDay(set(new Date(), { date: 13 }))
 
-    const { getByText } = render(<DateRangePickerCalendar locale={locale} focus={END_DATE} startDate={startDate} />)
+    const { getByText } = render(
+      <DateRangePickerCalendar locale={locale} focus={END_DATE} startDate={startDate} />
+    )
 
     expect(getByText('13').parentElement).not.toHaveClass('-disabled')
   })
@@ -142,7 +151,9 @@ describe('DateRangePickerCalendar', () => {
   it('should disable dates before the start date when selecting an end date with no existing end date selected', () => {
     const startDate = startOfDay(set(new Date(), { date: 18 }))
 
-    const { getByText } = render(<DateRangePickerCalendar locale={locale} focus={END_DATE} startDate={startDate} />)
+    const { getByText } = render(
+      <DateRangePickerCalendar locale={locale} focus={END_DATE} startDate={startDate} />
+    )
 
     expect(getByText('16').parentElement).toHaveClass('-disabled')
     expect(getByText('17').parentElement).toHaveClass('-disabled')
@@ -152,7 +163,9 @@ describe('DateRangePickerCalendar', () => {
   it('should disable dates after the end date when selecting a start date with no existing start date selected', () => {
     const endDate = startOfDay(set(new Date(), { date: 13 }))
 
-    const { getByText } = render(<DateRangePickerCalendar locale={locale} focus={START_DATE} endDate={endDate} />)
+    const { getByText } = render(
+      <DateRangePickerCalendar locale={locale} focus={START_DATE} endDate={endDate} />
+    )
 
     expect(getByText('13').parentElement).not.toHaveClass('-disabled')
     expect(getByText('14').parentElement).toHaveClass('-disabled')
@@ -163,7 +176,12 @@ describe('DateRangePickerCalendar', () => {
     const startDate = startOfDay(set(new Date(), { date: 18 }))
 
     const { getByText } = render(
-      <DateRangePickerCalendar locale={locale} focus={END_DATE} startDate={startDate} minimumLength={3} />
+      <DateRangePickerCalendar
+        locale={locale}
+        focus={END_DATE}
+        startDate={startDate}
+        minimumLength={3}
+      />
     )
 
     expect(getByText('18').parentElement).toHaveClass('-disabled')
@@ -176,7 +194,12 @@ describe('DateRangePickerCalendar', () => {
     const endDate = startOfDay(set(new Date(), { date: 18 }))
 
     const { getByText } = render(
-      <DateRangePickerCalendar locale={locale} focus={START_DATE} endDate={endDate} minimumLength={3} />
+      <DateRangePickerCalendar
+        locale={locale}
+        focus={START_DATE}
+        endDate={endDate}
+        minimumLength={3}
+      />
     )
 
     expect(getByText('18').parentElement).toHaveClass('-disabled')
@@ -189,7 +212,12 @@ describe('DateRangePickerCalendar', () => {
     const startDate = startOfDay(set(new Date(), { date: 13 }))
 
     const { getByText } = render(
-      <DateRangePickerCalendar locale={locale} focus={END_DATE} startDate={startDate} maximumLength={3} />
+      <DateRangePickerCalendar
+        locale={locale}
+        focus={END_DATE}
+        startDate={startDate}
+        maximumLength={3}
+      />
     )
 
     expect(getByText('13').parentElement).not.toHaveClass('-disabled')
@@ -203,7 +231,12 @@ describe('DateRangePickerCalendar', () => {
     const endDate = startOfDay(set(new Date(), { date: 18 }))
 
     const { getByText } = render(
-      <DateRangePickerCalendar locale={locale} focus={START_DATE} endDate={endDate} maximumLength={3} />
+      <DateRangePickerCalendar
+        locale={locale}
+        focus={START_DATE}
+        endDate={endDate}
+        maximumLength={3}
+      />
     )
 
     expect(getByText('18').parentElement).not.toHaveClass('-disabled')

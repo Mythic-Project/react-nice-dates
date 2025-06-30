@@ -15,7 +15,11 @@
         "types": "./build/index.d.ts",
         "default": "./build/index.js"
       }
-    }
+    },
+    "./style.css": "./build/style.css",
+    "./style.scss": "./src/style.scss",
+    "./build/style.css": "./build/style.css",
+    "./src/style.scss": "./src/style.scss"
   },
   "author": "Hernán Sartorio",
   "license": "MIT",
@@ -29,8 +33,7 @@
   "homepage": "https://github.com/hernansartorio/react-nice-dates#readme",
   "files": [
     "build",
-    "src/style.scss",
-    "index.d.ts"
+    "src/style.scss"
   ],
   "scripts": {
     "start": "parcel website/index.html -d tmp",
@@ -39,7 +42,7 @@
     "build:website": "rm -rf build-website/* && parcel build website/index.html -d build-website --experimental-scope-hoisting --no-content-hash && cp website/CNAME build-website/CNAME",
     "deploy": "gh-pages -d build-website",
     "dev:package": "tsup src/index.ts --watch",
-    "lint": "eslint --cache src",
+    "lint": "eslint src test --ext .ts,.tsx",
     "release": "yarn run build && np",
     "test": "jest",
     "test:watch": "jest --watch"
@@ -57,7 +60,8 @@
     "@eslint/js": "^9.30.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.0.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/jest": "^30.0.0",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^9.7.3",
@@ -65,7 +69,8 @@
     "eslint": "^9.30.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.1",
-    "jest": "^24.9.0",
+    "jest": "^30.0.3",
+    "jest-environment-jsdom": "^30.0.2",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-prerender": "^1.4.1",
     "postcss-cli": "^7.1.0",
@@ -75,6 +80,7 @@
     "react-dom": "^18",
     "react-test-renderer": "^18.3.1",
     "sass": "^1.25.0",
+    "ts-jest": "^29.4.0",
     "tsup": "^8.5.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.35.0"

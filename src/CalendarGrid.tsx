@@ -1,5 +1,5 @@
 import React from 'react'
-import { eachDayOfInterval, isSameMonth, lightFormat, startOfMonth } from 'date-fns'
+import { eachDayOfInterval, isSameMonth, lightFormat, startOfMonth, Locale } from 'date-fns'
 import classNames from 'classnames'
 import { useGrid } from './useGrid'
 import { ORIGIN_BOTTOM, ORIGIN_TOP } from './constants'
@@ -93,8 +93,8 @@ export function CalendarGrid({
         })}
         ref={containerElementRef}
         style={{
-          transform: `translate3d(0, ${offset}px, 0)`,
-          transitionDuration: `${transitionDuration}ms`
+          transform: `translate3d(0, ${String(offset)}px, 0)`,
+          transitionDuration: `${String(transitionDuration)}ms`
         }}
       >
         {days}

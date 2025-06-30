@@ -1,15 +1,12 @@
-import React from 'react'
 import { render } from '@testing-library/react'
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import { format } from 'date-fns'
 import { enGB as locale } from 'date-fns/locale'
-import Calendar from '../src/Calendar'
+import { Calendar } from '../src/Calendar'
 
 describe('Calendar', () => {
   it('should render', () => {
-    const { getAllByText, getByText } = render(
-      <Calendar locale={locale} />
-    )
+    const { getAllByText, getByText } = render(<Calendar locale={locale} />)
 
     const today = new Date()
     const dayShortName = format(today, 'eee', { locale })
@@ -23,9 +20,7 @@ describe('Calendar', () => {
   })
 
   it('should render the weekday dynamically', () => {
-    const { getByText } = render(
-      <Calendar locale={locale} weekdayFormat='EEEEEE' />
-    )
+    const { getByText } = render(<Calendar locale={locale} weekdayFormat='EEEEEE' />)
 
     const today = new Date()
     const dayShortName = format(today, 'EEEEEE', { locale })

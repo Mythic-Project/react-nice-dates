@@ -1,11 +1,10 @@
-import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import { format, subMonths } from 'date-fns'
 import { enGB as locale } from 'date-fns/locale'
 import classNames from 'classnames'
 import { START_DATE, END_DATE } from '../src/constants'
-import DateRangePicker from '../src/DateRangePicker'
+import { DateRangePicker } from '../src/DateRangePicker'
 
 describe('DateRangePicker', () => {
   it('should render', () => {
@@ -41,7 +40,10 @@ describe('DateRangePicker', () => {
               className={classNames({ '-focused': focus === START_DATE })}
               {...startDateInputProps}
             />
-            <input className={classNames({ '-focused': focus === END_DATE })} {...endDateInputProps} />
+            <input
+              className={classNames({ '-focused': focus === END_DATE })}
+              {...endDateInputProps}
+            />
           </div>
         )}
       </DateRangePicker>
@@ -66,30 +68,36 @@ describe('DateRangePicker', () => {
     expect(startDateInput).not.toHaveClass('-focused')
   })
 
-  it('should display pre-selected start date’s month on initial render', () => {
+  it("should display pre-selected start date's month on initial render", () => {
     const today = new Date()
     const pastDate = subMonths(today, 1)
     const monthName = format(pastDate, 'LLLL', { locale })
 
-    const { getByText } = render(
+    const { getAllByText } = render(
       <DateRangePicker locale={locale} startDate={pastDate} endDate={today}>
-        {() => {}}
+        {() => ''}
       </DateRangePicker>
     )
 
-    expect(getByText(monthName, { exact: false })).toBeInTheDocument()
+    const results = getAllByText(monthName, { exact: false })
+    expect(results.length).toBe(2)
+    expect(results[0]).toHaveClass('nice-dates-navigation_current')
+    expect(results[1]).toHaveClass('nice-dates-day_month')
   })
 
-  it('should display pre-selected end date’s month on initial render', () => {
+  it("should display pre-selected end date's month on initial render", () => {
     const pastDate = subMonths(new Date(), 1)
     const monthName = format(pastDate, 'LLLL', { locale })
 
-    const { getByText } = render(
+    const { getAllByText } = render(
       <DateRangePicker locale={locale} endDate={pastDate}>
-        {() => {}}
+        {() => ''}
       </DateRangePicker>
     )
 
-    expect(getByText(monthName, { exact: false })).toBeInTheDocument()
+    const results = getAllByText(monthName, { exact: false })
+    expect(results.length).toBe(2)
+    expect(results[0]).toHaveClass('nice-dates-navigation_current')
+    expect(results[1]).toHaveClass('nice-dates-day_month')
   })
 })

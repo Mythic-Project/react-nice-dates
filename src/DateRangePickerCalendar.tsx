@@ -51,19 +51,38 @@ export function DateRangePickerCalendar({
   const displayedStartDate =
     focus === START_DATE && !startDate && endDate && hoveredDate && !isSameDay(hoveredDate, endDate)
       ? hoveredDate
-      : startOfDay(new Date())
+      : startDate
+        ? startOfDay(startDate)
+        : null
 
   const displayedEndDate =
     focus === END_DATE && !endDate && startDate && hoveredDate && !isSameDay(hoveredDate, startDate)
       ? hoveredDate
-      : startOfDay(new Date())
+      : endDate
+        ? startOfDay(endDate)
+        : null
 
   const isStartDate = (date: Date) =>
-    isSameDay(date, displayedStartDate) && isBefore(date, displayedEndDate)
+    Boolean(
+      displayedStartDate &&
+        displayedEndDate &&
+        isSameDay(date, displayedStartDate) &&
+        isBefore(date, displayedEndDate)
+    )
   const isMiddleDate = (date: Date) =>
-    isAfter(date, displayedStartDate) && isBefore(date, displayedEndDate)
+    Boolean(
+      displayedStartDate &&
+        displayedEndDate &&
+        isAfter(date, displayedStartDate) &&
+        isBefore(date, displayedEndDate)
+    )
   const isEndDate = (date: Date) =>
-    isSameDay(date, displayedEndDate) && isAfter(date, displayedStartDate)
+    Boolean(
+      displayedStartDate &&
+        displayedEndDate &&
+        isSameDay(date, displayedEndDate) &&
+        isAfter(date, displayedStartDate)
+    )
 
   const modifiers = mergeModifiers(
     {

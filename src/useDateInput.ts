@@ -30,7 +30,8 @@ export function useDateInput({
   onDateChange,
   validate
 }: UseDateInputProps): UseDateInputReturn {
-  const formatString = receivedFormatString || locale.formatLong?.date({ width: 'short' })
+  const formatString =
+    receivedFormatString || (locale.formatLong?.date({ width: 'short' }) as string)
 
   const formatDate = (date: Date) => format(date, formatString, { locale })
   const parseDate = (dateString: string) =>

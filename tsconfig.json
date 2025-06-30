@@ -1,14 +1,3 @@
 {
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "jsx": "react-jsx",
-    "strict": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "moduleResolution": "node"
-  },
-  "include": ["src"],
-  "exclude": ["build"]
+  "extends": "./tsconfig.eslint.json",
 }
