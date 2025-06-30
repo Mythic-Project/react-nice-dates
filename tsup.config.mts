@@ -1,12 +1,18 @@
 import { type Options, defineConfig } from 'tsup'
+import browserslist from 'browserslist'
+import { resolveToEsbuildTarget } from 'esbuild-plugin-browserslist'
+
+const target = resolveToEsbuildTarget(browserslist(), {
+  printUnknownTargets: false
+})
 
 const commons: Options = {
-  minify: 'terser',
+  minify: true,
   sourcemap: true,
   dts: true,
-  clean: true,
-  target: 'es2018',
-  format: ['esm', 'cjs'],
+  clean: false,
+  target,
+  format: ['esm', 'cjs', 'iife']
 }
 
 export default defineConfig([
@@ -14,6 +20,6 @@ export default defineConfig([
     ...commons,
     entryPoints: ['src/index.ts'],
     outDir: 'build',
-    tsconfig: 'tsconfig.build.json',
-  },
+    tsconfig: 'tsconfig.build.json'
+  }
 ])

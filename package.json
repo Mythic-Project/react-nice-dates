@@ -7,6 +7,10 @@
   "types": "build/index.d.ts",
   "exports": {
     ".": {
+      "global": {
+        "types": "./build/index.d.ts",
+        "default": "./build/index.global.js"
+      },
       "import": {
         "types": "./build/index.d.mts",
         "default": "./build/index.mjs"
@@ -36,9 +40,13 @@
     "src/style.scss"
   ],
   "scripts": {
+    "setup": "yarn && yarn deduplicate",
+    "deduplicate": "yarn-deduplicate yarn.lock",
     "start": "parcel website/index.html -d tmp",
-    "prebuild": "rm -rf build",
-    "build": "tsup && sass src/style.scss build/style.css --no-source-map && postcss build/style.css --use autoprefixer -o build/style.css",
+    "prebuild": "npx update-browserslist-db@latest && rm -rf build",
+    "build": "run-p build:ts build:css",
+    "build:ts": "tsup",
+    "build:css": "sass src/style.scss build/style.css --no-source-map && postcss build/style.css --use autoprefixer -o build/style.css",
     "build:website": "rm -rf build-website/* && parcel build website/index.html -d build-website --experimental-scope-hoisting --no-content-hash && cp website/CNAME build-website/CNAME",
     "deploy": "gh-pages -d build-website",
     "dev:package": "tsup src/index.ts --watch",
@@ -64,25 +72,30 @@
     "@types/jest": "^30.0.0",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "autoprefixer": "^9.7.3",
+    "autoprefixer": "^10.4.21",
+    "browserslist": "^4.25.1",
     "date-fns": "^2.9.0",
+    "esbuild-plugin-browserslist": "^1.0.1",
     "eslint": "^9.30.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.1",
     "jest": "^30.0.3",
     "jest-environment-jsdom": "^30.0.2",
+    "npm-run-all": "^4.1.5",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-prerender": "^1.4.1",
-    "postcss-cli": "^7.1.0",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
     "prettier": "^3.6.2",
     "prism-react-renderer": "^1.0.2",
     "react": "^18",
     "react-dom": "^18",
     "react-test-renderer": "^18.3.1",
-    "sass": "^1.25.0",
+    "sass": "^1.89.2",
     "ts-jest": "^29.4.0",
     "tsup": "^8.5.0",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.35.0"
+    "typescript-eslint": "^8.35.0",
+    "yarn-deduplicate": "^6.0.2"
   }
 }
