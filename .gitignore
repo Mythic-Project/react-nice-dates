@@ -4,6 +4,5 @@
 node_modules/
 .eslintcache
 .parcel-cache
-build
 build-website
 tmp
