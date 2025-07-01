@@ -4,5 +4,9 @@
     "**/*.ts",
     "**/*.tsx"
   ],
-  "exclude": ["website/**"]
+  "exclude": [
+    "build",
+    "build-website",
+    "website/.parcel-cache/**",
+  ]
 }

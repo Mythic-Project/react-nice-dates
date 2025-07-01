@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import { format, parse, isValid, Locale } from 'date-fns'
 import { isSelectable } from './utils'
+import { DateChangeCallBack } from './types'
 
 export interface UseDateInputProps {
   date?: Date | null
@@ -8,7 +9,7 @@ export interface UseDateInputProps {
   locale: Locale
   minimumDate?: Date | null
   maximumDate?: Date | null
-  onDateChange: (date: Date | null) => void
+  onDateChange: DateChangeCallBack
   validate?: (date: Date) => boolean
 }
 

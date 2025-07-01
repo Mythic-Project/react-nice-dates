@@ -13,7 +13,7 @@ $nice-dates-color-gray: $color-gray;
 $nice-dates-color-gray-light: $color-gray-light;
 $nice-dates-color-accent: $color-accent;
 
-@import '../src/style';
+@use '../node_modules/react-nice-dates/style.css';
 
 * {
   box-sizing: border-box;

@@ -1,18 +1,20 @@
-import React, { useState } from 'react'
+'use client'
+
+import { useState } from 'react'
 import { format } from 'date-fns'
 import { enGB } from 'date-fns/locale'
-import { DatePickerCalendar, useDateInput } from '../../src'
-import Example from './Example'
+import { DatePickerCalendar, useDateInput } from 'react-nice-dates/index.mjs'
+import { Example } from '../components/Example'
 
 const code = `
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { format } from 'date-fns'
 import { enGB } from 'date-fns/locale'
 import { DatePickerCalendar, useDateInput } from 'react-nice-dates'
-import 'react-nice-dates/build/style.css'
+import 'react-nice-dates/style.css'
 
-export default function DatePickerCalendarWithInputExample() {
-  const [date, setDate] = useState()
+export function DatePickerCalendarWithInputExample() {
+  const [date, setDate] = useState<Date | null>(null)
 
   const inputProps = useDateInput({
     date,
@@ -22,18 +24,17 @@ export default function DatePickerCalendarWithInputExample() {
   })
 
   return (
-    <div>
+    <>
       <p>The selected date is {date && format(date, 'dd MMM yyyy', { locale: enGB })}</p>
       <input className='input' {...inputProps} />
       <DatePickerCalendar date={date} onDateChange={setDate} locale={enGB} />
-    </div>
+    </>
   )
 }
-
 `
 
-export default function DatePickerCalendarWithInputExample() {
-  const [date, setDate] = useState()
+export function DatePickerCalendarWithInputExample() {
+  const [date, setDate] = useState<Date | null>(null)
 
   const inputProps = useDateInput({
     date,

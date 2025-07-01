@@ -7,7 +7,7 @@ import prettierrc from './.prettierrc.json' with { type: 'json' }
 
 export default tseslint.config({
   files: ['**/*.ts', '**/*.tsx'],
-  ignores: ['**/build/**', '**/node_modules/**'],
+  ignores: ['**/build/**', '**/build-website/**', '**/node_modules/**'],
 
   extends: [
     eslintJs.configs.recommended,

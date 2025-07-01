@@ -1,19 +1,21 @@
-import React, { useState } from 'react'
+'use client'
+
+import { useState } from 'react'
 import { enUS, es } from 'date-fns/locale'
-import { DatePicker } from '../../src'
-import Example from './Example'
+import { DatePicker } from 'react-nice-dates/index.mjs'
+import { Example } from '../components/Example'
 
 const code = `
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { enUS, es } from 'date-fns/locale'
 import { DatePicker } from 'react-nice-dates'
-import 'react-nice-dates/build/style.css'
+import 'react-nice-dates/style.css'
 
-export default function LocalesExample() {
-  const [date, setDate] = useState()
+export function LocalesExample() {
+  const [date, setDate] = useState<Date | null>(null)
 
   return (
-    <div>
+    <>
       <p>US English:</p>
 
       <DatePicker date={date} onDateChange={setDate} locale={enUS}>
@@ -22,27 +24,31 @@ export default function LocalesExample() {
         )}
       </DatePicker>
 
+      <br />
+
       <p>Spanish:</p>
 
       <DatePicker date={date} onDateChange={setDate} locale={es} format='dd/MM/yyyy'>
         {({ inputProps, focused }) => (
-          <input className={'input' + (focused ? ' -focused' : '')} {...inputProps} placeholder='DD/MM/YYYY' />
+          <input className={'input' + (focused ? ' -focused' : '')} {...inputProps} />
         )}
       </DatePicker>
-    </div>
+    </>
   )
 }
 `
 
-export default function LocalesExample() {
-  const [date, setDate] = useState()
+export function LocalesExample() {
+  const [date, setDate] = useState<Date | null>(null)
 
   return (
     <Example code={code}>
       <p>US English:</p>
 
       <DatePicker date={date} onDateChange={setDate} locale={enUS}>
-        {({ inputProps, focused }) => <input className={'input' + (focused ? ' -focused' : '')} {...inputProps} />}
+        {({ inputProps, focused }) => (
+          <input className={'input' + (focused ? ' -focused' : '')} {...inputProps} />
+        )}
       </DatePicker>
 
       <br />

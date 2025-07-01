@@ -1,17 +1,19 @@
-import React, { useState } from 'react'
+'use client'
+
+import { useState } from 'react'
 import { format } from 'date-fns'
 import { enGB } from 'date-fns/locale'
-import { useDateInput } from '../../src'
-import Example from './Example'
+import { useDateInput } from 'react-nice-dates/index.mjs'
+import { Example } from '../components/Example'
 
 const code = `
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { format } from 'date-fns'
 import { enGB } from 'date-fns/locale'
 import { useDateInput } from 'react-nice-dates'
 
-export default function StandaloneInputExample() {
-  const [date, setDate] = useState()
+export function StandaloneInputExample() {
+  const [date, setDate] = useState<Date | null>(null)
 
   const inputProps = useDateInput({
     date,
@@ -25,18 +27,21 @@ export default function StandaloneInputExample() {
   }
 
   return (
-    <div>
+    <>
       <p>The selected date is {date && format(date, 'dd MMM yyyy', { locale: enGB })}</p>
-      <button onClick={handleReset}>Set today</button>
+      <p>
+        <button type='button' onClick={handleReset}>
+          Set today
+        </button>
+      </p>
       <input className='input' {...inputProps} />
-    </div>
+    </>
   )
 }
-
 `
 
-export default function StandaloneInputExample() {
-  const [date, setDate] = useState()
+export function StandaloneInputExample() {
+  const [date, setDate] = useState<Date | null>(null)
 
   const inputProps = useDateInput({
     date,
@@ -53,7 +58,9 @@ export default function StandaloneInputExample() {
     <Example code={code}>
       <p>The selected date is {date && format(date, 'dd MMM yyyy', { locale: enGB })}</p>
       <p>
-        <button onClick={handleReset}>Set today</button>
+        <button type='button' onClick={handleReset}>
+          Set today
+        </button>
       </p>
       <input className='input' {...inputProps} />
     </Example>

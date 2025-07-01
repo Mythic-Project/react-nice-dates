@@ -1,27 +1,29 @@
-import React, { useState } from 'react'
+'use client'
+
+import { useState } from 'react'
 import { getDay } from 'date-fns'
 import { enGB } from 'date-fns/locale'
-import { DatePickerCalendar } from '../../src'
-import Example from './Example'
+import { DatePickerCalendar } from 'react-nice-dates/index.mjs'
+import { Example } from '../components/Example'
 
 const code = `
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { getDay } from 'date-fns'
 import { enGB } from 'date-fns/locale'
 import { DatePickerCalendar } from 'react-nice-dates'
-import 'react-nice-dates/build/style.css'
+import 'react-nice-dates/style.css'
 
 const modifiers = {
-  disabled: date => getDay(date) === 6, // Disables Saturdays
-  highlight: date => getDay(date) === 2 // Highlights Tuesdays
+  disabled: (date: Date) => getDay(date) === 6, // Disables Saturdays
+  highlight: (date: Date) => getDay(date) === 2 // Highlights Tuesdays
 }
 
 const modifiersClassNames = {
   highlight: '-highlight'
 }
 
-export default function ModifiersExample() {
-  const [date, setDate] = useState()
+export function ModifiersExample() {
+  const [date, setDate] = useState<Date | null>(null)
 
   return (
     <DatePickerCalendar
@@ -39,16 +41,16 @@ export default function ModifiersExample() {
 `
 
 const modifiers = {
-  disabled: date => getDay(date) === 6,
-  highlight: date => getDay(date) === 2
+  disabled: (date: Date) => getDay(date) === 6, // Disables Saturdays
+  highlight: (date: Date) => getDay(date) === 2 // Highlights Tuesdays
 }
 
 const modifiersClassNames = {
   highlight: '-highlight'
 }
 
-export default function ModifiersExample() {
-  const [date, setDate] = useState()
+export function ModifiersExample() {
+  const [date, setDate] = useState<Date | null>(null)
 
   return (
     <Example code={code}>

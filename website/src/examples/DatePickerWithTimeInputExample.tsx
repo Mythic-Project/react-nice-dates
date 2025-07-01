@@ -1,16 +1,18 @@
-import React, { useState } from 'react'
+'use client'
+
+import { useState } from 'react'
 import { enGB } from 'date-fns/locale'
-import { DatePicker, useDateInput } from '../../src'
-import Example from './Example'
+import { DatePicker, useDateInput } from 'react-nice-dates/index.mjs'
+import { Example } from '../components/Example'
 
 const code = `
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { enGB } from 'date-fns/locale'
-import { DatePicker } from 'react-nice-dates'
-import 'react-nice-dates/build/style.css'
+import { DatePicker, useDateInput } from 'react-nice-dates'
+import 'react-nice-dates/style.css'
 
-function DatePickerWithTimeInputExample() {
-  const [date, setDate] = useState(new Date(2020, 1, 24, 18, 15))
+export function DatePickerWithTimeInputExample() {
+  const [date, setDate] = useState<Date | null>(() => new Date(2020, 1, 24, 18, 15))
 
   const timeInputProps = useDateInput({
     date,
@@ -23,7 +25,11 @@ function DatePickerWithTimeInputExample() {
     <div style={{ display: 'flex' }}>
       <DatePicker date={date} onDateChange={setDate} locale={enGB} format='dd/MM/yyyy'>
         {({ inputProps, focused }) => (
-          <input className={'input' + (focused ? ' -focused' : '')} style={{ width: 150 }} {...inputProps} />
+          <input
+            className={'input' + (focused ? ' -focused' : '')}
+            style={{ width: 150 }}
+            {...inputProps}
+          />
         )}
       </DatePicker>
 
@@ -33,8 +39,8 @@ function DatePickerWithTimeInputExample() {
 }
 `
 
-export default function DatePickerWithTimeInputExample() {
-  const [date, setDate] = useState(new Date(2020, 1, 24, 18, 15))
+export function DatePickerWithTimeInputExample() {
+  const [date, setDate] = useState<Date | null>(() => new Date(2020, 1, 24, 18, 15))
 
   const timeInputProps = useDateInput({
     date,
@@ -48,7 +54,11 @@ export default function DatePickerWithTimeInputExample() {
       <div style={{ display: 'flex' }}>
         <DatePicker date={date} onDateChange={setDate} locale={enGB} format='dd/MM/yyyy'>
           {({ inputProps, focused }) => (
-            <input className={'input' + (focused ? ' -focused' : '')} style={{ width: 150 }} {...inputProps} />
+            <input
+              className={'input' + (focused ? ' -focused' : '')}
+              style={{ width: 150 }}
+              {...inputProps}
+            />
           )}
         </DatePicker>
 

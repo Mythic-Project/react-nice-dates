@@ -1,17 +1,19 @@
-import React, { useState } from 'react'
+'use client'
+
+import { useState } from 'react'
 import { enGB } from 'date-fns/locale'
-import { DateRangePicker, START_DATE, END_DATE } from '../../src'
-import Example from './Example'
+import { DateRangePicker, START_DATE, END_DATE } from 'react-nice-dates/index.mjs'
+import { Example } from '../components/Example'
 
 const code = `
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { enGB } from 'date-fns/locale'
 import { DateRangePicker, START_DATE, END_DATE } from 'react-nice-dates'
-import 'react-nice-dates/build/style.css'
+import 'react-nice-dates/style.css'
 
-function DateRangePickerExample() {
-  const [startDate, setStartDate] = useState()
-  const [endDate, setEndDate] = useState()
+export function DateRangePickerExample() {
+  const [startDate, setStartDate] = useState<Date | null>(null)
+  const [endDate, setEndDate] = useState<Date | null>(null)
 
   return (
     <DateRangePicker
@@ -44,9 +46,9 @@ function DateRangePickerExample() {
 }
 `
 
-export default function DateRangePickerExample() {
-  const [startDate, setStartDate] = useState()
-  const [endDate, setEndDate] = useState()
+export function DateRangePickerExample() {
+  const [startDate, setStartDate] = useState<Date | null>(null)
+  const [endDate, setEndDate] = useState<Date | null>(null)
 
   return (
     <Example code={code}>
